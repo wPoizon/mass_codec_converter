@@ -64,3 +64,6 @@ Note: The script does NOT delete any files after conversion. Make sure you have 
 - **completed_files.txt**: Tracks successfully converted files and their processing times.
 - **wrong_codec_files.txt**: Lists files that do not match the input codec.
 - **error_files.txt**: Logs files that encountered errors during conversion.
+
+## License
+This project is licensed under the [MIT License](LICENSE).
