@@ -1,3 +1,7 @@
 *.log
 
 *.txt
+
+settings.cfg
+
+/unused_files/

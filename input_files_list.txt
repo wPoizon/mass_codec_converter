@@ -1,8 +1,7 @@
-C:\test\test\file1.mp4
+E:\example\example3.mkv
 
-C:\test\test\file2.mp4
-C:\test\test\file3.mp4
-
+E:\example\example\video1.mp4
+E:\example\example\example\video2.mov
 
 Total hevc files: 3
 Total size: 3.0 GB
