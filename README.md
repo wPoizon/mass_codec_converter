@@ -68,7 +68,7 @@ Note: The script does NOT delete any files after conversion. Make sure you have 
 
 ### Notes
 
-This project was done on Windows 10 and have not been tested on any other operating system. I doubt however that it would be that difficult to adapt it for python if someone wants to try!
+This project was done on Windows 10 and have not been tested on any other operating system. I doubt however that it would be that difficult to adapt it for Linux if someone wants to try!
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
