@@ -38,6 +38,10 @@ When the script has finished processing all files it will show a summary in the 
 
 Note: The script does NOT delete any files after conversion. Make sure you have free disk space for the new files.
 
+Below is what the terminal looked like when I had finished processing all my files with the script: 
+
+![Example Image](https://i.imgur.com/4lwGUxP.png)
+
 
 ### settings.cfg
 
