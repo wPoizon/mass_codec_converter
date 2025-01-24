@@ -4,14 +4,14 @@ Python scripts for batch video codec conversion with no user input required afte
 and allows stopping and restarting without losing much progress. Ideal for converting many files over hours or days, with ease.
 
 
-## How to use
-
 ## Prerequisites
 
 - Python 3.7+ installed on your system.
 - FFMPEG installed and available in your system's PATH.
 - Colorama Python library installed (`pip install colorama`).
 
+
+## How to use
 
 ### find_files.py
 
@@ -28,7 +28,7 @@ codec of all these files.
 
 After every file has been converted it adds the filepath to a new file completed_files.txt together with number of seconds the conversion took. This allows the user to close the program at any time they wish and their progress will have saved, meaning that the next time you start the program it will skip all the files within the completed_files.txt file and show how long those conversions took. It will then proceed with converting the next file. 
 
-If the input_base_folder consists of subfolders the program will keep the folder structure for the output_base_folder also. This means that when you are finished you could simply combine the output base folder with the input base folder and all the files will end up in their correct subfolder.
+If the input_base_folder consists of subfolders rercursively the program will keep the folder structure for the output_base_folder also. This means that when you are finished you could simply combine the output base folder with the input base folder and all the files will end up in their correct subfolder.
 
 If files of the wrong codec are found, the conversion for this file will be skipped and the filepath of it will be saved in wrong_codec_files.txt. The script will then continue with the next file.
 
