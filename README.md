@@ -69,5 +69,10 @@ Below is what the terminal looked like when I had finished processing all my fil
 - **wrong_codec_files.txt**: Lists files that do not match the input codec.
 - **error_files.txt**: Logs files that encountered errors during conversion.
 
+
+### Notes
+
+This project was done on Windows 10 and have not been tested on any other operating system. I doubt however that it would be that difficult to adapt it for Linux if someone wants to try!
+
 ## License
 This project is licensed under the [MIT License](LICENSE).
