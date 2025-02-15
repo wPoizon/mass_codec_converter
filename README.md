@@ -52,8 +52,8 @@ Below is what the terminal looked like when I had finished processing all my fil
 - **input_files_list_name:** The name of the file containing the filepaths.
 - **use_input_files_list:** Whether to use the `input_files_list.txt` file (`True` or `False`). If false, it will convert all files in the base folder.
 
-- **input_codec_suffix:** Codec suffix of the input files (e.g., `H265`).
-- **output_codec_suffix:** Codec suffix for the converted files (e.g., `H264`).
+- **input_codec:** Codec suffix of the input files (e.g., `H265`).
+- **encoder:** Encoder that will be used for conversion (e.g., `H264`).
 
 - **speed_preset:** FFMPEG speed preset (e.g., `medium`).
 - **crf_quality:** FFMPEG quality setting (e.g., `19`).
@@ -72,7 +72,7 @@ Below is what the terminal looked like when I had finished processing all my fil
 
 ### Notes
 
-This project was done on Windows 10 and have not been tested on any other operating system. I doubt however that it would be that difficult to adapt it for Linux if someone wants to try!
+This project was done on Windows 10 and have not been tested on any other operating system. I doubt however that it would be that difficult to adapt it for Linux if someone wants to try! It might even work straight away. 
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
