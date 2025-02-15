@@ -21,10 +21,11 @@ output_base_folder = config.get('Paths', 'output_base_folder')
 output_base_folder = os.path.abspath(output_base_folder)
 script_folder = config.get('Paths', 'script_folder')
 input_files_list_name = config.get('Paths', 'input_files_list_name')
-use_input_files_list = config.getboolean('Paths', 'use_input_files_list')  # Read as boolean
+use_input_files_list = config.getboolean('Paths', 'use_input_files_list')
 
 # Access variables in the Codecs section
 input_codec = config.get('Codecs', 'input_codec')
+skip_codec_checking = config.getboolean('Codecs', 'skip_codec_checking')
 encoder = config.get('Codecs', 'encoder')
 
 # Access variables in the Transcoding settings section
@@ -271,7 +272,7 @@ for input_file in input_files:
         continue
 
     # If file is the right codec, start transcoding process
-    if input_codec_name.lower() == input_codec.lower():
+    if input_codec_name.lower() == input_codec.lower() or skip_codec_checking:
         
         # Ensure the output directory exists
         output_dir = os.path.dirname(output_file)

@@ -53,6 +53,7 @@ Below is what the terminal looked like when I had finished processing all my fil
 - **use_input_files_list:** Whether to use the `input_files_list.txt` file (`True` or `False`). If false, it will convert all files in the base folder.
 
 - **input_codec:** Codec suffix of the input files (e.g., `H265`).
+- **skip_codec_checking:** If input files are of different codecs this can be set to True to allow them all. (`True` or `False`).
 - **encoder:** Encoder that will be used for conversion (e.g., `H264`).
 
 - **speed_preset:** FFMPEG speed preset (e.g., `medium`).
