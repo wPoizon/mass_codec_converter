@@ -3,26 +3,30 @@ import configparser
 import subprocess
 import sys
 
-# Load the configuration file
+# Get path to settings.cfg file
 config = configparser.ConfigParser()
-config.read('settings.cfg')  # Update to the actual location of your properties file
+script_dir = os.path.dirname(os.path.abspath(__file__))
+config_path = os.path.join(script_dir, 'settings.cfg')
+config.read(config_path)
 
-
-script_folder = config.get('Paths', 'script_folder')
+# Access variables in the Paths section
 input_base_folder = config.get('Paths', 'input_base_folder')
+script_folder = config.get('Paths', 'script_folder')
 input_files_list_name = config.get('Paths', 'input_files_list_name')
-input_codec_suffix = config.get('Codecs', 'input_codec_suffix')
+input_codec = config.get('Codecs', 'input_codec').strip().lower()
 
 # Set paths
-log_and_input_files_path = script_folder + "\\"  # Path to your files.txt
-files_list_path = log_and_input_files_path + input_files_list_name  # Path to your files.txt
+files_list_path = os.path.join(script_folder, input_files_list_name)
 
-if (input_codec_suffix == "H264"):
-    input_suffix = "libx264"
-elif (input_codec_suffix == "H265"):
-    input_suffix = "hevc"
-else:
-    print("Wrong codec, exiting")
+# Adjust input codec for FFMPEG
+codec_mapping = {
+    "h264" : "h264",
+    "h265" : "hevc",
+    "vp9" : "vp9",
+}
+ffmpeg_input_codec = codec_mapping.get(input_codec)
+if ffmpeg_input_codec is None:
+    print("Error: Invalid input codec specified in settings.cfg. Exiting.")
     sys.exit()
 
 def is_codec(codec, file_path):
@@ -34,7 +38,7 @@ def is_codec(codec, file_path):
             text=True,
             timeout=10  # Timeout in seconds
         )
-        return result.stdout.strip() == codec  # 'hevc' is the codec name for H265
+        return result.stdout.strip() == codec  # Direct codec comparison
     except subprocess.TimeoutExpired:
         print(f"Timeout checking file {file_path}. Skipping...")
         return False
@@ -56,7 +60,7 @@ def find_codec_videos(codec, input_base, output_file):
         for name in files:
             file_path = os.path.join(root, name)
             print(f"Checking file: {file_path}")
-            if is_codec(codec, file_path):
+            if is_codec(ffmpeg_input_codec, file_path):
                 total_files += 1
                 # Get the file size in bytes
                 file_size = os.path.getsize(file_path)
@@ -72,7 +76,7 @@ def find_codec_videos(codec, input_base, output_file):
                 # Write directly to the output file
                 with open(output_file, 'a', encoding='utf-8') as file:
                     file.write(f"{file_path}\n")
-                print(f"   Found {codec} file: {name} ({file_size / (1024 ** 3):.2f} GB)")
+                print(f"   Found {codec} file: {name} ({file_size / (1024 ** 3):.2f} GB)\n")
 
         if folder_size > 0:
             folder_size_gb = folder_size / (1024 ** 3)  # Convert folder size to GB
@@ -89,4 +93,4 @@ def find_codec_videos(codec, input_base, output_file):
 print("input_files_list_name: " + input_files_list_name)
 print("files_list_path: " + files_list_path)
 
-find_codec_videos(input_suffix, input_base_folder, files_list_path)
+find_codec_videos(ffmpeg_input_codec, input_base_folder, files_list_path)
