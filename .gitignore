@@ -2,6 +2,8 @@
 
 *.txt
 
+*.bat
+
 settings.cfg
 
 /unused_files/

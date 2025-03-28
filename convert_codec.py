@@ -36,6 +36,9 @@ crf_quality = config.get('Transcoding settings', 'crf_quality')
 copy_files_of_wrong_codec = config.getboolean('Other', 'copy_files_of_wrong_codec')
 verbose_information = config.getboolean('Other', 'verbose_information')
 
+use_different_extension = config.getboolean('Other', 'use_different_extension')
+output_extension = config.get('Other', 'output_extension')
+
 if (verbose_information):
     loglevel = "verbose"
 else:
@@ -147,7 +150,7 @@ def format_file_size(file_path):
 # Load the list of completed files and their times
 completed_files = set()
 if os.path.exists(completed_files_path):
-    with open(completed_files_path, "r") as cf:
+    with open(completed_files_path, "r", encoding="utf-8") as cf:
         for line in cf:
             if line.strip():  # Ensure the line is not empty
                 try:
@@ -164,21 +167,21 @@ if os.path.exists(completed_files_path):
     
 # Load the list of error files
 if os.path.exists(error_files_path):
-    with open(error_files_path, "r") as cf:
+    with open(error_files_path, "r", encoding="utf-8") as cf:
         error_files = set(line.strip() for line in cf if line.strip())
 else:
     error_files = set()
         
 # Load the list of wrong codec files
 if os.path.exists(wrong_codec_files_path):
-    with open(wrong_codec_files_path, "r") as cf:
+    with open(wrong_codec_files_path, "r", encoding="utf-8") as cf:
         other_codec_files = set(line.strip() for line in cf if line.strip())
 else:
     other_codec_files = set()
 
 # Read the list of input files
 if (use_input_files_list):
-    with open(files_list_path, "r") as f:
+    with open(files_list_path, "r", encoding="utf-8") as f:
         input_files = [line.strip() for line in f if line.strip() and not line.startswith("Total ")]
         input_files = [f for f in input_files if f.lower().endswith(video_extensions)]  # Filter non-video files
 else:
@@ -205,7 +208,7 @@ for input_file in input_files:
         print(Fore.RED + f"Error constructing relative path for {input_file}: {e}" + Style.RESET_ALL)
         failed_counter += 1
         if not any(input_file in error for error in error_files):
-            with open(error_files_path, "a") as cf:
+            with open(error_files_path, "a", encoding="utf-8") as cf:
                 cf.write(f"Error constructing relative path: {input_file}\n")
             error_files.add(f"Error constructing relative path: {input_file}")
         continue
@@ -213,7 +216,10 @@ for input_file in input_files:
     output_file = os.path.join(output_base_folder, relative_path)
     
     bit_depth = "8bit" if ffmpeg_encoder in ["libx264", "h264_nvenc"] else "10bit"  
-    path_and_name, extension = os.path.splitext(output_file)
+    path_and_name, original_extension = os.path.splitext(output_file)
+    
+    if use_different_extension:
+        output_file = f"{path_and_name}.{output_extension}"
 
     matching_tuple = None
 
@@ -266,13 +272,13 @@ for input_file in input_files:
         failed_counter += 1
         
         if not any(input_file in error for error in error_files):
-            with open(error_files_path, "a") as cf:
+            with open(error_files_path, "a", encoding="utf-8") as cf:
                 cf.write(f"Error reading codec: {input_file}\n")
             error_files.add(f"Error reading codec: {input_file}")
         continue
 
     # If file is the right codec, start transcoding process
-    if input_codec_name.lower() == input_codec.lower() or skip_codec_checking:
+    if input_codec_name.lower() == ffmpeg_input_codec.lower() or skip_codec_checking:
         
         # Ensure the output directory exists
         output_dir = os.path.dirname(output_file)
@@ -284,7 +290,7 @@ for input_file in input_files:
                 failed_counter += 1
                 
                 if not any(output_dir in error for error in error_files):
-                    with open(error_files_path, "a") as cf:
+                    with open(error_files_path, "a", encoding="utf-8") as cf:
                         cf.write(f"Error creating directory: {output_dir}\n")
                     error_files.add(f"Error creating directory: {output_dir}")
                 continue
@@ -338,7 +344,7 @@ for input_file in input_files:
             transcoding_time = int(time.time() - start_time)
             
             # Mark as completed
-            with open(completed_files_path, "a") as cf:
+            with open(completed_files_path, "a", encoding="utf-8") as cf:
                 cf.write(f"{transcoding_time} {output_file} \n")
             
             # Increment the counter
@@ -358,7 +364,7 @@ for input_file in input_files:
             failed_counter += 1
             
             if not any(input_file in error for error in error_files):
-                with open(error_files_path, "a") as cf:
+                with open(error_files_path, "a", encoding="utf-8") as cf:
                     cf.write(f"Error while transcoding: {input_file}\n")
                 error_files.add(f"Error while transcoding: {input_file}")
             continue
@@ -393,11 +399,11 @@ for input_file in input_files:
                 
             
             # Mark as completed
-            with open(completed_files_path, "a") as cf:
+            with open(completed_files_path, "a", encoding="utf-8") as cf:
                 cf.write(f"copied {output_path}\n")
         
         if not any(input_file in error for error in other_codec_files):
-            with open(wrong_codec_files_path, "a") as cf:
+            with open(wrong_codec_files_path, "a", encoding="utf-8") as cf:
                 cf.write(f"File is {input_codec_name}, not {ffmpeg_input_codec}: " + output_file + " \n")
             other_codec_files.add(f"File is {input_codec_name}, not {ffmpeg_input_codec}: {output_file}")
 
