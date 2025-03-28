@@ -1,7 +1,6 @@
-# Mass Codec Converter
+# BatchTranscoder
 
-Python scripts for batch video codec conversion with no user input required after starting. Supports long-running sessions, tracks progress, 
-and allows stopping and restarting without losing much progress. Ideal for converting many files over hours or days, with ease.
+Python scripts for batch video transcoding with no user input required after starting. Allows specifying both input and output codec (H264 or H265). Supports long sessions, tracks progress, and allows stopping and restarting without losing much progress. Ideal for converting many files with ease.
 
 
 ## Prerequisites
@@ -18,25 +17,24 @@ and allows stopping and restarting without losing much progress. Ideal for conve
 This script finds all video files within a directory of the codec that you choose, and then saves each files' filepath
 to the input_files_list.txt file. At the end of the file it shows how many files it found and how many gigabytes these
 files are in total, to give a view on how long the conversion might take. This file can then be directly used with the
-conversion script. If you wish you could add or remove entries within this file.
+transcoding script. If you wish you could add or remove entries within this file.
 
 
-### convert_codec.py
+### batch_transcoder.py
 
-This script converts the files into your new codec using FFMPEG. It reads the input_files_list.txt file and prepares to convert the
-codec of all these files. 
+This script handles the batch transcoding of all files listed in `input_files_list.txt` using FFmpeg.
 
-After every file has been converted it adds the filepath to a new file completed_files.txt together with number of seconds the conversion took. This allows the user to close the program at any time they wish and their progress will have saved, meaning that the next time you start the program it will skip all the files within the completed_files.txt file and show how long those conversions took. It will then proceed with converting the next file. 
+After every file has been transcoded it adds its filepath to a new file completed_files.txt together with number of seconds the conversion took. This allows the user to close the program at any time they wish and their progress will have saved, meaning that the next time you start the program it will skip all the files within the completed_files.txt file and show how long the transcode took. It will then proceed with transcoding the next file. 
 
-If the input_base_folder consists of subfolders rercursively the program will keep the folder structure for the output_base_folder also. This means that when you are finished you could simply combine the output base folder with the input base folder and all the files will end up in their correct subfolder.
+If the input_base_folder consists of subfolders rercursively the program will keep the folder structure for the output_base_folder. This means that when you are finished you could simply combine the output base folder with the input base folder and all the files will end up in their correct subfolder.
 
-If files of the wrong codec are found, the conversion for this file will be skipped and the filepath of it will be saved in wrong_codec_files.txt. The script will then continue with the next file.
+If files of the wrong codec are found, transcoding for this file will be skipped and the filepath of it will be saved in wrong_codec_files.txt. The script will then continue with the next file.
 
-If there is an error with the conversion of a file, that file will be skipped and the filepath will be saved into error_files.txt. The script will then continue with the next file. 
+If there is an error with transcoding a file, it will be skipped and the filepath will be saved into error_files.txt. The script will then continue with the next file. 
 
 When the script has finished processing all files it will show a summary in the terminal. If any files have failed it will be mentioned in the summary. 
 
-Note: The script does NOT delete any files after conversion. Make sure you have free disk space for the new files.
+Note: The script does NOT delete any files. Make sure you have free disk space for the new files.
 
 Below is what the terminal looked like when I had finished processing all my files with the script: 
 
